@@ -1,17 +1,23 @@
 package main
 
-import(
+import (
+	"flag"
 	"fmt"
 	"net/http"
 )
 
-func main(){
+var port = flag.String("http", ":8888", "HTTP port number.")
+
+func init() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		value := r.FormValue("key")
 		fmt.Println(value)
 		w.Write([]byte(value))
 	})
+}
 
-	fmt.Println(http.ListenAndServe(":8888", nil))
+func main() {
+	fmt.Println("Start HTTP Server localhost:", *port)
+	fmt.Println(http.ListenAndServe(*port, nil))
 }
