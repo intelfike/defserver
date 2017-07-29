@@ -11,6 +11,7 @@ import (
 var port = flag.String("http", ":8888", "HTTP port number.")
 
 func init() {
+	flag.Parse()
 	f, err := checkmodfile.RegistFile("main.go")
 	if err != nil {
 		fmt.Print(err)
@@ -18,12 +19,11 @@ func init() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		b, err := f.GetLatest()
+		err := f.WriteTo()
 		if err != nil {
 			fmt.Fprint(w, err)
 			return
 		}
-		w.Write(b)
 	})
 }
 
